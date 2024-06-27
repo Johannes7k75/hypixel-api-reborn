@@ -137,6 +137,7 @@ export type SOCIAL_MEDIA_ID = 'YOUTUBE' | 'DISCORD' | 'HYPIXEL' | 'TWITTER' | 'I
 export type SKYWARS_KIT_TYPE = 'basic' | 'supporting' | 'mining' | 'defending' | 'attacking' | 'advanced' | 'enderchest';
 export type SKYWARS_KIT_GAMEMODE = 'solo' | 'team';
 export type SKYBLOCK_BESTIARY = number;
+export type SKYBLOCK_TROPHY_FISH = 'Diamond' | 'Gold' | 'Silver' | 'Bronze';
 export interface SKYBLOCK_BESTIARY_CATEGORY {
   [key: string]: {
     damage?: number;
@@ -156,6 +157,17 @@ export interface SKYBLOCK_SKILL_DATA {
   xpForNext: number;
   progress: number;
 }
+export interface NETHER_ISLAND_PLAYER_DATA {
+  none: number;
+  hot: number;
+  burning: number;
+  fiery: number;
+  highest_wave_hot: number;
+  highest_wave_fiery: number;
+  infernal: number;
+  highest_wave_infernal: number;
+  highest_wave_burning: number;
+}
 export type SKYBLOCK_DUNGEON_CLASS_DATA = SKYBLOCK_SKILL_DATA;
 export type SKYBLOCK_DUNGEON_TYPE_DATA = SKYBLOCK_SKILL_DATA;
 export interface SKYBLOCK_SLAYER_DATA {
@@ -164,6 +176,7 @@ export interface SKYBLOCK_SLAYER_DATA {
   tier2: number;
   tier3: number;
   tier4: number;
+  tier5: number;
   level: number;
 }
 export interface clientOptions {
@@ -1915,7 +1928,7 @@ declare module 'hypixel-api-reborn' {
     fairySouls: number;
     experience: number;
     hotm: SKYBLOCK_SKILL_DATA;
-    trophyFish: number;
+    trophyFish: SKYBLOCK_TROPHY_FISH;
     highestMagicalPower: number;
     skills: {
       taming: SKYBLOCK_SKILL_DATA;
@@ -1939,9 +1952,17 @@ declare module 'hypixel-api-reborn' {
       vampire: SKYBLOCK_SLAYER_DATA;
     };
     bestiary: SKYBLOCK_BESTIARY;
+    kuudra: NETHER_ISLAND_PLAYER_DATA;
     dungeons: {
       types: {
-        catacombs: SKYBLOCK_DUNGEON_TYPE_DATA;
+        catacombs: {
+          experience: SKYBLOCK_DUNGEON_TYPE_DATA;
+          completions: { [name: string]: number };
+        };
+        master_catacombs: {
+          experience: SKYBLOCK_DUNGEON_TYPE_DATA;
+          completions: { [name: string]: number };
+        };
       };
       classes: {
         healer: SKYBLOCK_DUNGEON_CLASS_DATA;

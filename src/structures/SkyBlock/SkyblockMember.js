@@ -83,7 +83,7 @@ class SkyblockMember {
      * Trophy fish amount of rewards
      * @type {number}
      */
-    this.trophyFish = getTrophyFishRank(data.m.trophy_fish?.rewards.length ?? 0);
+    this.trophyFish = getTrophyFishRank(data.m.trophy_fish?.rewards?.length ?? 0);
     /**
      * The highest magical power **Not current one**
      * @type {number}
@@ -140,6 +140,11 @@ class SkyblockMember {
      * @type {SkyblockMemberSlayer|null}
      */
     this.slayer = getSlayer(data.m);
+    /**
+     * Skyblock member slayer
+     * @type {NetherIslandPlayerData|null}
+     */
+    this.kuudra = data.m.nether_island_player_data?.kuudra_completed_tiers;
     /**
      * Skyblock member dungeons
      * @type {SkyblockMemberDungeons|null}
@@ -348,18 +353,45 @@ function getDungeons(data) {
   }
   return {
     types: {
-      catacombs: getLevelByXp(data.dungeons.dungeon_types.catacombs ? data.dungeons.dungeon_types.catacombs.experience : null, 'dungeons')
+      catacombs: {
+        experience: getLevelByXp(data.dungeons.dungeon_types?.catacombs?.experience ?? null, 'dungeons'),
+        completions: getCompletions(data.dungeons.dungeon_types?.catacombs?.tier_completions)
+      },
+      master_catacombs: {
+        experience: getLevelByXp(data.dungeons.dungeon_types?.catacombs?.experience ?? null, 'dungeons'),
+        completions: getCompletions(data.dungeons.dungeon_types?.master_catacombs?.tier_completions)
+      }
     },
     classes: {
-      healer: getLevelByXp(data.dungeons.player_classes.healer ? data.dungeons.player_classes.healer.experience : null, 'dungeons'),
-      mage: getLevelByXp(data.dungeons.player_classes.mage ? data.dungeons.player_classes.mage.experience : null, 'dungeons'),
-      berserk: getLevelByXp(data.dungeons.player_classes.berserk ? data.dungeons.player_classes.berserk.experience : null, 'dungeons'),
-      archer: getLevelByXp(data.dungeons.player_classes.archer ? data.dungeons.player_classes.archer.experience : null, 'dungeons'),
-      tank: getLevelByXp(data.dungeons.player_classes.tank ? data.dungeons.player_classes.tank.experience : null, 'dungeons')
+      healer: getLevelByXp(data.dungeons.player_classes?.healer?.experience ?? null, 'dungeons'),
+      mage: getLevelByXp(data.dungeons.player_classes?.mage?.experience ?? null, 'dungeons'),
+      berserk: getLevelByXp(data.dungeons.player_classes?.berserk?.experience ?? null, 'dungeons'),
+      archer: getLevelByXp(data.dungeons.player_classes?.archer?.experience ?? null, 'dungeons'),
+      tank: getLevelByXp(data.dungeons.player_classes?.tank?.experience ?? null, 'dungeons')
     }
   };
 }
-// eslint-disable-next-line require-jsdoc
+
+// eslint-disable-next-line valid-jsdoc
+/**
+ * @param {{[key: string]: number}} data
+ * @returns {{[key: string]: number}}
+ */
+function getCompletions(data) {
+  const completions = {};
+
+  // eslint-disable-next-line guard-for-in
+  for (const tier in data) {
+    completions[`Floor_${tier}`] = data[tier];
+  }
+
+  return completions;
+}
+/**
+ * @param {object} data
+ * @return {jacobData}
+ */
+
 function getJacobData(data) {
   if (!data.m.jacob2) {
     return {
@@ -434,6 +466,9 @@ function getPetLevel(petExp, offsetRarity, maxLevel) {
  * @property {SkyblockInventoryItem|null} boots Boots
  */
 /**
+ * @typedef {"Diamond"|"Gold"|"Silver"|"Bronze"} SkyBlockTrophyFish The Trophy Fish ranks
+ */
+/**
  * @typedef {object} SkyblockMemberSkills
  * @property {SkyblockSkillLevel} farming Farming skill
  * @property {SkyblockSkillLevel} mining Mining skill
@@ -463,6 +498,18 @@ function getPetLevel(petExp, offsetRarity, maxLevel) {
  * @property {SkyblockMemberSlayerLevel} zombie
  * @property {SkyblockMemberSlayerLevel} spider
  * @property {SkyblockMemberSlayerLevel} wolf
+ */
+/**
+ * @typedef {object} NetherIslandPlayerData
+ * @property {object} kuudra_completed_tiers
+ * @property {number} kuudra_completed_tiers.hot
+ * @property {number} kuudra_completed_tiers.burning
+ * @property {number} kuudra_completed_tiers.fiery
+ * @property {number} kuudra_completed_tiers.highest_wave_hot
+ * @property {number} kuudra_completed_tiers.highest_wave_fiery
+ * @property {number} kuudra_completed_tiers.infernal
+ * @property {number} kuudra_completed_tiers.highest_wave_infernal
+ * @property {number} kuudra_completed_tiers.highest_wave_burning
  */
 /**
  * @typedef {object} SkyblockMemberSlayerLevel
