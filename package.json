@@ -1,6 +1,6 @@
 {
   "name": "hypixel-api-reborn",
-  "version": "11.3.4",
+  "version": "11.3.5",
   "description": "Feature-rich Hypixel API wrapper for Node.js",
   "main": "./src/index.js",
   "types": "./typings/index.d.ts",
@@ -42,9 +42,9 @@
   "publisher": "StavZ",
   "devDependencies": {
     "@discordjs/docgen": "github:discordjs/docgen",
-    "@types/node": "^22.4.0",
+    "@types/node": "^22.5.0",
     "chai": "^4.3.4",
-    "eslint": "^9.9.0",
+    "eslint": "^9.9.1",
     "eslint-plugin-jsdoc": "^50.2.2",
     "globals": "^15.9.0",
     "mocha": "^10.4.0",
