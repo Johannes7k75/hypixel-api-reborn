@@ -1,12 +1,12 @@
 /* eslint-disable jsdoc/require-jsdoc */
+const { parse, simplify } = require('prismarine-nbt');
 const constants = require('./Constants');
 
 async function decode(base64, isBuffer = false) {
-  const nbt = require('prismarine-nbt');
-  const parseNbt = require('util').promisify(nbt.parse);
+  // Credit: https://github.com/SkyCryptWebsite/SkyCryptv2/blob/3b5b3ae4fe77c60eff90691797f09024baf68872/src/lib/server/stats/items/processing.ts#L215-L218
   const buffer = isBuffer ? base64 : Buffer.from(base64, 'base64');
-  let data = await parseNbt(buffer);
-  data = nbt.simplify(data);
+  let data = await parse(buffer);
+  data = simplify(data.parsed);
   const newdata = [];
   for (let i = 0; i < data.i.length; i++) {
     newdata.push(data.i[i]);
@@ -370,10 +370,14 @@ function getCrimson(data) {
 }
 
 function getCompletions(data) {
-  const completions = {};
+  const completions = {
+    total: 0
+  };
 
   for (const tier in data) {
+    if ('total' === tier) continue;
     completions[`Floor_${tier}`] = data[tier];
+    completions.total += data[tier];
   }
 
   return completions;
@@ -411,13 +415,13 @@ function getDungeons(data) {
       floor5: getDungeonsFloor(data, 'catacombs', '5'),
       floor6: getDungeonsFloor(data, 'catacombs', '6'),
       floor7: getDungeonsFloor(data, 'catacombs', '7'),
-      masterMode1: getDungeonsFloor(data, 'master_catacombs', '1'),
-      masterMode2: getDungeonsFloor(data, 'master_catacombs', '2'),
-      masterMode3: getDungeonsFloor(data, 'master_catacombs', '3'),
-      masterMode4: getDungeonsFloor(data, 'master_catacombs', '4'),
-      masterMode5: getDungeonsFloor(data, 'master_catacombs', '5'),
-      masterMode6: getDungeonsFloor(data, 'master_catacombs', '6'),
-      masterMode7: getDungeonsFloor(data, 'master_catacombs', '7')
+      masterCatacombs1: getDungeonsFloor(data, 'master_catacombs', '1'),
+      masterCatacombs2: getDungeonsFloor(data, 'master_catacombs', '2'),
+      masterCatacombs3: getDungeonsFloor(data, 'master_catacombs', '3'),
+      masterCatacombs4: getDungeonsFloor(data, 'master_catacombs', '4'),
+      masterCatacombs5: getDungeonsFloor(data, 'master_catacombs', '5'),
+      masterCatacombs6: getDungeonsFloor(data, 'master_catacombs', '6'),
+      masterCatacombs7: getDungeonsFloor(data, 'master_catacombs', '7')
     },
     classes: {
       healer: getLevelByXp(data?.dungeons?.player_classes?.healer?.experience ?? 0, 'dungeons'),
@@ -619,6 +623,30 @@ function populateGoals(achieved, all) {
   return populatedAchieved;
 }
 
+function getHOTM(data) {
+  return {
+    experience: getLevelByXp(data.mining_core?.experience, 'hotm'),
+    ability: data.mining_core?.selected_pickaxe_ability || 'none',
+    powder: {
+      mithril: {
+        spent: data?.mining_core?.powder_spent_mithril || 0,
+        current: data?.mining_core?.powder_mithril || 0,
+        total: data?.mining_core?.powder_spent_mithril || 0 + data?.mining_core?.powder_mithril || 0
+      },
+      gemstone: {
+        spent: data?.mining_core?.powder_spent_gemstone || 0,
+        current: data?.mining_core?.powder_gemstone || 0,
+        total: data?.mining_core?.powder_spent_gemstone || 0 + data?.mining_core?.powder_gemstone || 0
+      },
+      glacite: {
+        spent: data?.mining_core?.powder_spent_glacite || 0,
+        current: data?.mining_core?.powder_glacite || 0,
+        total: data?.mining_core?.powder_spent_glacite || 0 + data?.mining_core?.powder_glacite || 0
+      }
+    }
+  };
+}
+
 module.exports = {
   decode,
   getLevelByXp,
@@ -634,5 +662,6 @@ module.exports = {
   getPetLevel,
   parseRarity,
   parseGearScore,
-  populateGoals
+  populateGoals,
+  getHOTM
 };
