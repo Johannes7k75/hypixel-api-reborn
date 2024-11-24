@@ -17,22 +17,22 @@ class SkyblockGarden {
      * Current Barn Skin
      * @type {string}
      */
-    this.barnSkin = data.garden?.selected_barn_skin || '';
+    this.barnSkin = data?.garden?.selected_barn_skin || '';
     /**
      * Unlocked Plots
      * @type {string[]}
      */
-    this.unlockedPlots = data.garden?.unlocked_plots_ids || [];
+    this.unlockedPlots = data?.garden?.unlocked_plots_ids || [];
     /**
      * Visitor Stats
      * @type {SkyblockGardenVisitor}
      */
     this.visitors = {
-      visited: data.garden?.commission_data?.visits || {},
-      completed: data.garden?.commission_data?.completed || {},
+      visited: data?.garden?.commission_data?.visits || {},
+      completed: data?.garden?.commission_data?.completed || {},
       served: {
-        total: data.garden?.commission_data?.total_completed || 0,
-        unique: data.garden?.commission_data?.unique_npcs_served || 0
+        total: data?.garden?.commission_data?.total_completed || 0,
+        unique: data?.garden?.commission_data?.unique_npcs_served || 0
       }
     };
     /**
@@ -56,17 +56,17 @@ class SkyblockGarden {
      * @type {SkyblockGardenComposter}
      */
     this.composter = {
-      organicMatter: data.garden?.composter_data?.organic_matter || 0,
-      fuelUnits: data.garden?.composter_data?.fuel_units || 0,
-      compostUnits: data.garden?.composter_data?.compost_units || 0,
-      compostItems: data.garden?.composter_data?.compost_items || 0,
-      conversionTicks: data.garden?.composter_data?.conversion_ticks || 0,
+      organicMatter: data?.garden?.composter_data?.organic_matter || 0,
+      fuelUnits: data?.garden?.composter_data?.fuel_units || 0,
+      compostUnits: data?.garden?.composter_data?.compost_units || 0,
+      compostItems: data?.garden?.composter_data?.compost_items || 0,
+      conversionTicks: data?.garden?.composter_data?.conversion_ticks || 0,
       upgrades: {
-        speed: data.garden?.composter_data?.upgrades?.speed || 0,
-        multiDrop: data.garden?.composter_data?.upgrades?.multi_drop || 0,
-        fuelCap: data.garden?.composter_data?.upgrades?.fuel_cap || 0,
-        organicMatterCap: data.garden?.composter_data?.upgrades?.organic_matter_cap || 0,
-        costReduction: data.garden?.composter_data?.upgrades?.cost_reduction || 0
+        speed: data?.garden?.composter_data?.upgrades?.speed || 0,
+        multiDrop: data?.garden?.composter_data?.upgrades?.multi_drop || 0,
+        fuelCap: data?.garden?.composter_data?.upgrades?.fuel_cap || 0,
+        organicMatterCap: data?.garden?.composter_data?.upgrades?.organic_matter_cap || 0,
+        costReduction: data?.garden?.composter_data?.upgrades?.cost_reduction || 0
       }
     };
     /**
